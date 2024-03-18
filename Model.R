@@ -106,5 +106,47 @@ bar_graph
 # were much greater. However, this makes sense because that data was gathered 
 # in polls held in smaller vicinities compared to ballots across whole states.
 
+### Second Graph ###
+winners$candidate <- as.integer(winners$candidate)
 
+for (i in 1:nrow(winners)) {
+  if (winners$candidate[i] == 0) {
+    winners$win_margin[i] <- winners$win_margin[i] * -1
+  }
+}
 
+trump_or_biden <- glm(candidate ~ win_perc, 
+                      data = winners,
+                      family = "binomial")
+summary(trump_or_biden1)
+
+trump_or_biden_prediction <- 
+  predictions(trump_or_biden) |> as_tibble()
+
+trump_or_biden_prediction
+
+# Panel (a)
+trump_or_biden_prediction |>
+  ggplot(aes(x = win_perc, y = candidate, color = factor(candidate))) +
+  geom_jitter(width = 0.01, height = 0.01, alpha = 0.3) +
+  labs(
+    x = "Win Percentage",
+    y = "Candidate",
+    color = "Candidate"
+  ) +
+  theme_classic() +
+  scale_color_brewer(palette = "Set1", direction = -1) +  
+  theme(legend.position = "bottom")
+
+# Panel (b)
+trump_or_biden_prediction |>
+  ggplot(aes(x = win_perc, y = candidate, color = factor(candidate))) +
+  stat_ecdf(geom = "point", alpha = 0.75) +
+  labs(
+    x = "Win Percentage",
+    y = "Candidate",
+    color = "Candidate"
+  ) +
+  theme_classic() +
+  scale_color_brewer(palette = "Set1", direction = -1) +  
+  theme(legend.position = "bottom")
