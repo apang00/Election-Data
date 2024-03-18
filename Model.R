@@ -80,6 +80,15 @@ for (i in seq(1, nrow(filtered_data), by = 2)) {
 
 winners <- subset(filtered_data, !is.na(win_margin))
 
+### Estimation ###
+# I estimate that based on the election results, I will see significantly more
+# states have votes for Biden over Trump, or more blue bars than red bars
+# on the bar graph below regardless of marginal win percent.
+
+# Furthermore, I definitely expect a correlation between the winning margin 
+# percent to the results of the state (of course because a +winning margin 
+# means the candidate won the state, and a -winnning margin means they lost)
+
 ### Graphing ###
 
 bar_graph <- ggplot(winners, aes(x = factor(state), y = win_margin, fill = factor(candidate))) +
